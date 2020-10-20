@@ -31,4 +31,4 @@ typing-extensions==3.7.4.3
 urwid==2.1.2
 wcwidth==0.2.5
 Werkzeug==1.0.1
-uwsqi
+uwsgi
