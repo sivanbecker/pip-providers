@@ -8,7 +8,7 @@ from flask_marshmallow import Marshmallow
 
 from resources.provider import ProviderResource, ProviderListResource
 
-SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
+SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", os.environ.get('SQLALCHEMY_DATABASE_URI'))
 SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get("SQLALCHEMY_TRACK_MODIFICATIONS")
 
 app = Flask(__name__)
