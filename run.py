@@ -1,6 +1,6 @@
-from app import app
-from db import db
-from schemas.provider import ma
+from app import app # pylint: disable=import-error
+from db import db # pylint: disable=import-error
+from schemas.provider import ma # pylint: disable=import-error
 
 db.init_app(app)
 ma.init_app(app)

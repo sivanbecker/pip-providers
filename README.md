@@ -1,1 +1,1 @@
-# pip-providers
+# pip-service-providers
