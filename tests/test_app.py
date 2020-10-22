@@ -1,5 +1,5 @@
 from conftest import TestConfig
-from resources.provider import provider_schema, ProviderListResource, ProviderResource #pylint: disable=import-error, no-name-in-module
+from resources.provider import provider_schema, ProviderListResource, ProviderResource
 
 
 def test_index(client):

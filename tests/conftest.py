@@ -6,7 +6,7 @@ from sqlalchemy_utils.functions import database_exists, create_database, drop_da
 
 from app import create_app #pylint: disable=import-error
 from db import db as _db #pylint: disable=import-error
-from models.provider import Provider #pylint: disable=import-error
+from models.provider import Provider
 
 class TestConfig:
     ''' Just a generic test configuration '''
@@ -53,7 +53,7 @@ def gen_test_db():
 
 
 @pytest.fixture
-def client(gen_test_db):
+def client(gen_test_db): #pylint: disable=redefined-outer-name, unused-argument
     current_app = create_app()
     current_app.config['TESTING'] = True
     current_app.config['SQLALCHEMY_DATABASE_URI'] = TestConfig.SQLALCHEMY_DATABASE_URI
