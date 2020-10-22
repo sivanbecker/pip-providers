@@ -9,6 +9,8 @@ from sqlalchemy.orm.exc import NoResultFound
 
 class ProviderResource(Resource):
 
+    BASE_ROUTE = '/provider' 
+    API_ROUTE = '/provider/<string:mispar_osek>'
     def get(self, mispar_osek):
         try:
             _provider = Provider.query.filter_by(mispar_osek=mispar_osek).one()
@@ -64,5 +66,7 @@ class ProviderResource(Resource):
 
 class ProviderListResource(Resource):
 
+    BASE_ROUTE = '/providers'
+    API_ROUTE = '/providers'
     def get(self):
         return {'providers': providers_schema.dump(Provider.query.all())}

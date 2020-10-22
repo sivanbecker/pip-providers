@@ -6,7 +6,7 @@ class ProviderSchema(ma.Schema):
     ''' Service Provider Marshmallow Schema'''
     class Meta:
         '''Marshmallow Schema Meta class'''
-        fields = ("name", "mispar_osek", "service_type", "added")
+        fields = ("name", "mispar_osek", "service_type", "added", "id")
 
 provider_schema = ProviderSchema()
 providers_schema = ProviderSchema(many=True)

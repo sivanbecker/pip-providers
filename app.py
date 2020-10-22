@@ -9,13 +9,13 @@ SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get("SQLALCHEMY_TRACK_MODIFICATIONS"
 
 def create_app():
     _app = Flask(__name__)
-    app.config['DEBUG'] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = SQLALCHEMY_TRACK_MODIFICATIONS
+    _app.config['DEBUG'] = True
+    _app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
+    _app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = SQLALCHEMY_TRACK_MODIFICATIONS
     api = Api(_app)
 
-    api.add_resource(ProviderResource, '/provider/<string:mispar_osek>')
-    api.add_resource(ProviderListResource, '/providers')
+    api.add_resource(ProviderResource, ProviderResource.API_ROUTE)
+    api.add_resource(ProviderListResource, ProviderListResource.API_ROUTE)
 
     @_app.route('/index')
     @_app.route('/')
