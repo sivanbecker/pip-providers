@@ -1,14 +1,15 @@
-import pytest
 from datetime import datetime
-from app import create_app
-from db import db as _db
-from flask import request
-from models.provider import Provider
+import pytest
 from sqlalchemy import create_engine
-from sqlalchemy_utils.functions import database_exists, create_database, drop_database
 from sqlalchemy.orm.session import sessionmaker
+from sqlalchemy_utils.functions import database_exists, create_database, drop_database
+
+from app import create_app #pylint: disable=import-error
+from db import db as _db #pylint: disable=import-error
+from models.provider import Provider #pylint: disable=import-error
 
 class TestConfig:
+    ''' Just a generic test configuration '''
     TESTING = True
     WTF_CSRF_ENABLED = False
     SQLALCHEMY_DATABASE_URI = 'postgresql://postgres@127.0.0.1:5432/test_service_providers'
@@ -26,7 +27,7 @@ class TestConfig:
         service_type='test_service_type',
         added=datetime.now()
         )
-    
+
 @pytest.fixture
 def app():
     current_app = create_app()
@@ -34,22 +35,21 @@ def app():
 
 @pytest.fixture(scope='session')
 def gen_test_db():
-    
+
     engine = create_engine(TestConfig.SQLALCHEMY_DATABASE_URI)
-    Session = sessionmaker(bind=engine)
-    session = Session()
+    session = sessionmaker(bind=engine)()
     try:
         if not database_exists(engine.url):
             create_database(engine.url)
-            session.commit()
+            session.commit() #pylint: disable=no-member
             yield session
     except:
-        session.rollback()
+        session.rollback() #pylint: disable=no-member
         raise
     finally:
         drop_database(engine.url)
-        session.commit()
-        session.close()
+        session.commit() #pylint: disable=no-member
+        session.close() #pylint: disable=no-member
 
 
 @pytest.fixture
@@ -66,4 +66,3 @@ def client(gen_test_db):
             _db.session.add(TestConfig.TEST_PROVIDER2)
             _db.session.commit()
             yield clnt
-            

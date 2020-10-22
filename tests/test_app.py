@@ -1,6 +1,6 @@
-from flask import url_for
-from resources.provider import provider_schema, ProviderListResource, ProviderResource
 from conftest import TestConfig
+from resources.provider import provider_schema, ProviderListResource, ProviderResource #pylint: disable=import-error, no-name-in-module
+
 
 def test_index(client):
     resp = client.get('/')
@@ -9,7 +9,7 @@ def test_index(client):
 
 def test_get_providers(client):
     '''
-    at this stage we have a db called test_service_providers with 
+    at this stage we have a db called test_service_providers with
     two fake records.
 
     1. test get request of providers
@@ -20,9 +20,7 @@ def test_get_providers(client):
     assert resp.status_code == 200
     assert resp.is_json
     assert provider_schema.dump(TestConfig.TEST_PROVIDER2) in resp.json['providers']
-    
+
 def test_get_provider(client):
     resp = client.get(f"{ProviderResource.BASE_ROUTE}/{TestConfig.TEST_PROVIDER1.mispar_osek}")
     assert provider_schema.dump(TestConfig.TEST_PROVIDER1) == resp.json['provider']
-    
-
