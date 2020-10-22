@@ -28,7 +28,8 @@ jobs:
       # Downloads a copy of the code in your repository before running CI tests
       - name: Check out repository code
         uses: actions/checkout@v2
-
+      - name: check python version
+        run: python --version
       - name: Install dependencies
         run: |
           python3 -m pip install --upgrade pip
