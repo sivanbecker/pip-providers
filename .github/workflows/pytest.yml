@@ -1,5 +1,5 @@
 name: Pytest with PostgreSQL Service
-on: push
+on: [push]
 
 jobs:
   runner-job:
@@ -31,9 +31,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-        python -m pip install --upgrade pip
-        pip install pytest
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          python -m pip install --upgrade pip
+          pip install pytest
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: run tests
         
         run: pytest -v
