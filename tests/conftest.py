@@ -42,7 +42,7 @@ class TestConfig:
 
 
 @pytest.fixture(scope='session')
-def database(request):
+def create_database(request):
     '''
     Create a Postgres database for the tests, and drop it when the tests are done.
     '''
@@ -63,46 +63,71 @@ def database(request):
         janitor.drop()
 
 
-@pytest.fixture(scope='function')
-def _app(database): #pylint: disable=unused-argument, redefined-outer-name
+@pytest.fixture(scope='session')
+def _app(create_database): #pylint: disable=unused-argument, redefined-outer-name
     current_app = create_app()
     current_app.config['SQLALCHEMY_DATABASE_URI'] = TestConfig.SQLALCHEMY_DATABASE_URI
     current_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = TestConfig.SQLALCHEMY_TRACK_MODIFICATIONS
     return current_app
 
-# @pytest.fixture(scope='session')
-# def app(database):
-#     '''
-#     Create a Flask app context for the tests.
-#     '''
-#     app = Flask(__name__)
-
-#     app.config['SQLALCHEMY_DATABASE_URI'] = DB_CONN
-
-#     return app
-
-
-@pytest.fixture(scope='function')
+@pytest.fixture(scope='session')
 def _db(_app):
     '''
     Provide the transactional fixtures with access to the database via a Flask-SQLAlchemy
     database connection.
     '''
-    # from db import db
     return db
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def client(_app, _db): #pylint: disable=redefined-outer-name, unused-argument
-    # current_app = create_app()
     _app.config['TESTING'] = True
-    # _app.config['SQLALCHEMY_DATABASE_URI'] = TestConfig.SQLALCHEMY_DATABASE_URI
 
     with _app.test_client() as clnt:
         with _app.app_context():
             _db.init_app(_app)
             _db.create_all()
-            _db.session.add(TestConfig.TEST_PROVIDER1)
-            _db.session.add(TestConfig.TEST_PROVIDER2)
             _db.session.commit()
             yield clnt
+
+@pytest.fixture
+def _provider1(request, _db): 
+
+    def delete_provider1(): #pylint: disable=unused-variable
+        _db.session.delete(TestConfig.TEST_PROVIDER1)
+        _db.session.commit()
+
+    _db.session.add(TestConfig.TEST_PROVIDER1)
+    _db.session.commit()
+    yield TestConfig.TEST_PROVIDER1
+    delete_provider1()
+
+@pytest.fixture
+def _providers(request, _db):
+
+    p1 = Provider(
+        name='test_name1',
+        mispar_osek=123,
+        service_type='test_service_type',
+        added=datetime.now()
+        )
+    p2 = Provider(
+        name='test_name2',
+        mispar_osek=456,
+        service_type='test_service_type',
+        added=datetime.now()
+        )
+
+    # import pudb;pu.db
+    def delete_providers(): #pylint: disable=unused-variable
+        _db.session.delete(p1)
+        _db.session.delete(p2)
+        _db.session.commit()
+
+    _db.session.add(p1)
+    # _db.session.commit()
+    _db.session.add(p2)
+    _db.session.commit()
+    yield (p1, p2)
+    delete_providers()
+    
