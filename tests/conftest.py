@@ -53,7 +53,7 @@ def gen_test_db():
 
 
 @pytest.fixture
-def client(gen_test_db): #pylint: disable=redefined-outer-name, unused-argument
+def client(): #pylint: disable=redefined-outer-name, unused-argument
     current_app = create_app()
     current_app.config['TESTING'] = True
     current_app.config['SQLALCHEMY_DATABASE_URI'] = TestConfig.SQLALCHEMY_DATABASE_URI
