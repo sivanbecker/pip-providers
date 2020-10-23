@@ -52,8 +52,8 @@ def database(request):
     pg_host = TestConfig.DB_OPTS.get("host")
     pg_port = TestConfig.DB_OPTS.get("port")
     pg_db = TestConfig.DB_OPTS["database"]
-    # pg_pass = DB_OPTS.get("password")
-    janitor = DatabaseJanitor(pg_user, pg_host, pg_port, pg_db, TestConfig.POSTGRES_VER)    
+    pg_pass = TestConfig.DB_OPTS.get("password")
+    janitor = DatabaseJanitor(pg_user, pg_host, pg_port, pg_db, TestConfig.POSTGRES_VER, pg_pass)    
     try:
         janitor.init()
     except DuplicateDatabase:
