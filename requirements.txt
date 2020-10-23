@@ -33,3 +33,4 @@ wcwidth==0.2.5
 Werkzeug==1.0.1
 uwsgi
 sqlalchemy_utils==0.36.8
+pytest_postgresql==2.5.1
