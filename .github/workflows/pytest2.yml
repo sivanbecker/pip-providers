@@ -25,7 +25,8 @@ jobs:
         architecture: x64
     - name: Install packages and run tests
       run: |
-        pip install --upgrade pip        
+        pip install --upgrade pip
+        pip install -r requirements.txt       
         pytest
       env:
         TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_service_providers
