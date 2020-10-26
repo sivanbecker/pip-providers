@@ -21,7 +21,7 @@ class ProviderResource(Resource):
 
     def post(self, mispar_osek): #pylint: disable=no-self-use
         if Provider.query.filter_by(mispar_osek=mispar_osek).count():
-            return {'message': 'Provider with mispar-osek={mispar_osek} already exists'}, 400
+            return {'message': f'Provider with mispar-osek={mispar_osek} already exists'}, 400
 
         data = request.get_json()
         new_provider = Provider(
@@ -35,7 +35,7 @@ class ProviderResource(Resource):
             db.session.commit()
             return {'provider': provider_schema.dump(new_provider)}
         except IntegrityError as exc:
-            return {'message': str(exc)}
+            return {'message': str(exc)}, 400
 
 
     def put(self, mispar_osek): #pylint: disable=no-self-use

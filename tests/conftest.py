@@ -1,4 +1,5 @@
 import os
+import random
 from datetime import datetime
 import pytest
 import sqlalchemy as sa
@@ -8,6 +9,9 @@ from psycopg2.errors import DuplicateDatabase
 from app import create_app #pylint: disable=import-error
 from db import db #pylint: disable=import-error
 from models.provider import Provider
+
+def rand_mispar_osek(low=1, high=10000):
+    return random.randint(low, high)
 
 class TestConfig:
     ''' Just a generic test configuration '''
@@ -29,13 +33,13 @@ class TestConfig:
     DEBUG = True
     TEST_PROVIDER1 = Provider(
         name='test_name1',
-        mispar_osek=123,
+        mispar_osek=rand_mispar_osek(),
         service_type='test_service_type',
         added=datetime.now()
         )
     TEST_PROVIDER2 = Provider(
         name='test_name2',
-        mispar_osek=456,
+        mispar_osek=rand_mispar_osek(),
         service_type='test_service_type',
         added=datetime.now()
         )
@@ -91,43 +95,49 @@ def client(_app, _db): #pylint: disable=redefined-outer-name, unused-argument
             yield clnt
 
 @pytest.fixture
-def _provider1(request, _db): 
+def _provider1_obj():
+    mispar = rand_mispar_osek()
+    provider1 = Provider(
+        name=f'test_name{mispar}',
+        mispar_osek=mispar,
+        service_type='test_service_type',
+        added=datetime.now()
+        )
+    return provider1
+
+@pytest.fixture
+def _provider2_obj():
+    mispar = rand_mispar_osek()
+    provider2 = Provider(
+        name=f'test_name{mispar}',
+        mispar_osek=mispar,
+        service_type='test_service_type',
+        added=datetime.now()
+        )
+    return provider2
+
+@pytest.fixture
+def _provider1_in_db(request, _db, _provider1_obj): #pylint: disable=unused-argument 
 
     def delete_provider1(): #pylint: disable=unused-variable
-        _db.session.delete(TestConfig.TEST_PROVIDER1)
+        _db.session.delete(_provider1_obj)
         _db.session.commit()
 
-    _db.session.add(TestConfig.TEST_PROVIDER1)
+    _db.session.add(_provider1_obj)
     _db.session.commit()
-    yield TestConfig.TEST_PROVIDER1
+    yield _provider1_obj
     delete_provider1()
 
 @pytest.fixture
-def _providers(request, _db):
+def _providers_in_db(request, _db, _provider1_obj, _provider2_obj): #pylint: disable=unused-argument
 
-    p1 = Provider(
-        name='test_name1',
-        mispar_osek=123,
-        service_type='test_service_type',
-        added=datetime.now()
-        )
-    p2 = Provider(
-        name='test_name2',
-        mispar_osek=456,
-        service_type='test_service_type',
-        added=datetime.now()
-        )
-
-    # import pudb;pu.db
     def delete_providers(): #pylint: disable=unused-variable
-        _db.session.delete(p1)
-        _db.session.delete(p2)
+        _db.session.delete(_provider1_obj)
+        _db.session.delete(_provider2_obj)
         _db.session.commit()
 
-    _db.session.add(p1)
-    # _db.session.commit()
-    _db.session.add(p2)
+    _db.session.add(_provider1_obj)
+    _db.session.add(_provider2_obj)
     _db.session.commit()
-    yield (p1, p2)
+    yield (_provider1_obj, _provider2_obj)
     delete_providers()
-    
