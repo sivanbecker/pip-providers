@@ -23,4 +23,4 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Lint with pylint
       run: |
-        pylint *.py
+        pylint *.py models/*.py resources/*.py schemas/*.py tests/*.py --rcfile .pylintrc

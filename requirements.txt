@@ -5,7 +5,6 @@ Flask==1.1.2
 flask-marshmallow==0.14.0
 Flask-RESTful==0.3.8
 Flask-SQLAlchemy==2.4.4
-gunicorn==20.0.4
 itsdangerous==1.1.0
 Jinja2==2.11.2
 Logbook==1.5.3
@@ -33,3 +32,5 @@ urwid==2.1.2
 wcwidth==0.2.5
 Werkzeug==1.0.1
 uwsgi
+sqlalchemy_utils==0.36.8
+pytest_postgresql==2.5.1

@@ -1,5 +1,6 @@
-from db import db
 from datetime import datetime
+from db import db #pylint: disable=import-error
+
 
 class Provider(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -10,5 +11,3 @@ class Provider(db.Model):
 
     def __repr__(self):
         return f'<Provider {self.name} - {self.mispar_osek}>'
-
-
