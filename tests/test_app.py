@@ -82,3 +82,8 @@ def test_update_non_existing_provider(client, _provider1_obj):
     assert resp_update.json['provider']['mispar_osek'] == str(_provider1_obj.mispar_osek)
     assert resp_update.json['provider']['name'] == _provider1_obj.name
     assert resp_update.json['provider']['service_type'] == _provider1_obj.service_type
+
+def test_heroku_app(heroku_client):
+    resp = heroku_client.get('/')
+    assert resp.status_code == 200
+    assert resp.data == b'Welcome to Service-Providers App'

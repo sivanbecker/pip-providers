@@ -9,6 +9,7 @@ from psycopg2.errors import DuplicateDatabase
 from app import create_app #pylint: disable=import-error
 from db import db #pylint: disable=import-error
 from models.provider import Provider
+from run import run as _heroku_run #pylint: disable=no-name-in-module
 
 def rand_mispar_osek(low=1, high=10000):
     return random.randint(low, high)
@@ -44,6 +45,21 @@ class TestConfig:
         added=datetime.now()
         )
 
+
+@pytest.fixture
+def _heroku_app():
+    return _heroku_run(production=False)
+
+@pytest.fixture
+def heroku_client(_heroku_app):
+    _heroku_app.config['TESTING'] = True
+
+    with _heroku_app.test_client() as clnt:
+        with _heroku_app.app_context():
+            # _db.init_app(_heroku_app)
+            # _db.create_all()
+            # _db.session.commit()
+            yield clnt
 
 @pytest.fixture(scope='session')
 def create_database(request):
