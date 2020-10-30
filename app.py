@@ -1,6 +1,7 @@
 import os
 from flask import Flask
 from flask_restful import Api
+from flask_cors import CORS
 
 from resources.provider import ProviderResource, ProviderListResource #pylint: disable=import-error, no-name-in-module
 
@@ -9,6 +10,7 @@ SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get("SQLALCHEMY_TRACK_MODIFICATIONS"
 
 def create_app():
     _app = Flask(__name__)
+    CORS(_app)
     _app.config['DEBUG'] = True
     _app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
     _app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = SQLALCHEMY_TRACK_MODIFICATIONS
