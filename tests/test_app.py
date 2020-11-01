@@ -73,7 +73,8 @@ def test_delete_non_existing_provider(client, _provider1_obj):
     assert resp_delete.status_code == 400
     assert resp_delete.is_json
     assert resp_delete.json == {'message':
-                                f'Provider with mispar-osek={_provider1_obj.mispar_osek} does not exist'}
+                                f'Provider with mispar-osek = \
+                                {_provider1_obj.mispar_osek} does not exist'}
 
 
 def test_update_existing_provider(client, _provider1_in_db):
@@ -86,8 +87,6 @@ def test_update_existing_provider(client, _provider1_in_db):
     assert resp_update.json == {'message': 'Provider updated'}
     resp_after_db_update = client.get(
         f"{ProviderResource.BASE_ROUTE}/{_provider1_in_db.mispar_osek}")
-    # import pudb
-    # pu.db
     assert _provider1_in_db.name == resp_after_db_update.json['provider']['name']
 
 
