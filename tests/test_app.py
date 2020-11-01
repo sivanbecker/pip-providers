@@ -73,8 +73,7 @@ def test_delete_non_existing_provider(client, _provider1_obj):
     assert resp_delete.status_code == 400
     assert resp_delete.is_json
     assert resp_delete.json == {'message':
-                                f'Provider with mispar-osek = \
-                                {_provider1_obj.mispar_osek} does not exist'}
+                                f'Provider with mispar-osek={_provider1_obj.mispar_osek} does not exist'}  # pylint: disable=line-too-long
 
 
 def test_update_existing_provider(client, _provider1_in_db):
